@@ -4,6 +4,8 @@
 #include "Character/SUETC_.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+
 
 // Sets default values
 ASUETC_::ASUETC_()
@@ -17,6 +19,13 @@ ASUETC_::ASUETC_()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ASUETC_::OnOverlapBegin);
+
+
+	Struct.Health = 100.0f;
+	Struct.Character_Name = "Default_name";
+
 
 }
 
@@ -32,6 +41,8 @@ void ASUETC_::BeginPlay()
 	SpringArmComp->SetRelativeRotation(SpringArmRotation);
 
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Health : %f"), Struct.Health);
+	UE_LOG(LogTemp, Warning, TEXT("Name : %s"), *Struct.Character_Name);
 }
 
 // Called every frame
@@ -47,4 +58,13 @@ void ASUETC_::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void ASUETC_::OnOverlapBegin_Implementation(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (ISUETCInterface* Interact = Cast<ISUETCInterface>(OtherActor))
+	{
+		Interact->Interaction();
+	}
+}
+
 

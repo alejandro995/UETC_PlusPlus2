@@ -1,9 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "Struct/SMyStruct.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/SUETCInterface.h"
+
 #include "SUETC_.generated.h"
 
 class USpringArmComponent;
@@ -29,6 +32,13 @@ public:
 
 	FRotator SpringArmRotation;
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Switch Functions")
+    void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	void OnOverlapBegin_Implementation(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	FSMyStruct Struct;
 
 	ASUETC_();
 
